@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   ArrowRight,
-  ChevronDown,
   Loader2,
 } from 'lucide-react';
 import {
@@ -19,17 +18,6 @@ import {
 import type { ConfirmationResult } from 'firebase/auth';
 import { auth } from '../firebase';
 
-const COUNTRY_CODES = [
-  { code: '+91', country: 'India', flag: '🇮🇳' },
-  { code: '+971', country: 'UAE', flag: '🇦🇪' },
-  { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
-  { code: '+974', country: 'Qatar', flag: '🇶🇦' },
-  { code: '+968', country: 'Oman', flag: '🇴🇲' },
-  { code: '+965', country: 'Kuwait', flag: '🇰🇼' },
-  { code: '+44', country: 'UK', flag: '🇬🇧' },
-  { code: '+1', country: 'USA', flag: '🇺🇸' },
-];
-
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const { showToast } = useResidency();
@@ -41,7 +29,7 @@ export const LoginPage: React.FC = () => {
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
 
   // Phone form state
-  const [countryCode, setCountryCode] = useState('+91');
+  const countryCode = '+91';
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [formattedTargetPhone, setFormattedTargetPhone] = useState('');
@@ -198,8 +186,8 @@ export const LoginPage: React.FC = () => {
     setInlineError(null);
 
     const rawDigits = phone.replace(/\D/g, '');
-    if (rawDigits.length < 7) {
-      setInlineError('Please enter a valid mobile number.');
+    if (rawDigits.length < 10) {
+      setInlineError('Please enter a valid 10-digit mobile number.');
       return;
     }
 
@@ -372,24 +360,15 @@ export const LoginPage: React.FC = () => {
                 />
               </div>
 
+              {/* Mobile Number with fixed Indian code */}
               <div>
                 <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
                   Mobile Number *
                 </label>
                 <div className="flex rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden bg-gray-50 dark:bg-white/5 focus-within:ring-1 focus-within:ring-warm-gold">
-                  <div className="relative border-r border-gray-200 dark:border-white/10 bg-gray-100/80 dark:bg-white/10 flex items-center">
-                    <select
-                      value={countryCode}
-                      onChange={(e) => setCountryCode(e.target.value)}
-                      className="py-2.5 pl-2.5 pr-6 text-xs font-bold text-gray-700 dark:text-gray-200 bg-transparent border-0 appearance-none focus:ring-0 cursor-pointer"
-                    >
-                      {COUNTRY_CODES.map((c) => (
-                        <option key={c.code} value={c.code} className="bg-white dark:bg-[#15171C] text-gray-900 dark:text-white">
-                          {c.flag} {c.code}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="w-3 h-3 text-gray-400 absolute right-1.5 pointer-events-none" />
+                  <div className="border-r border-gray-200 dark:border-white/10 bg-gray-100/80 dark:bg-white/10 px-3.5 py-2.5 flex items-center gap-1.5 select-none">
+                    <span className="text-base leading-none">🇮🇳</span>
+                    <span className="text-xs font-bold text-gray-700 dark:text-gray-200">+91</span>
                   </div>
                   
                   <input
@@ -398,7 +377,8 @@ export const LoginPage: React.FC = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="98765 43210"
-                    className="flex-1 py-2.5 px-3.5 bg-transparent border-0 text-xs font-semibold text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-0"
+                    maxLength={14}
+                    className="flex-1 py-2.5 px-3.5 bg-transparent border-0 text-xs font-semibold text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-0 focus:outline-none"
                   />
                 </div>
                 <p className="text-[10px] text-gray-400 mt-1">
