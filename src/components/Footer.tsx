@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { RESIDENCY_CONTACT } from '../data/residencyData';
-import { MapPin, Phone, Mail, Globe, Share2, Compass } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -22,78 +22,72 @@ export const Footer: React.FC = () => {
                   TV Residency
                 </span>
                 <span className="text-[9px] tracking-[0.28em] uppercase text-warm-gold font-semibold -mt-0.5">
-                  Refined Kerala Luxury
+                  Rooms & Villas in Kottakkal
                 </span>
               </div>
             </Link>
 
             <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
-              TV Residency, Collegepadi, Kottakkal, Near Ahalya Eye Hospital. A premier hotel and residency offering elegant luxury rooms, private villas, and exceptional 24/7 hospitality.
+              TV Residency, Collegepadi, Kottakkal, Near Ahalya Eye Hospital. Comfortable rooms and spacious villas with essential amenities in Kottakkal.
             </p>
 
             <div className="flex items-center gap-3 text-warm-gold pt-2">
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors">
+              <a 
+                href={RESIDENCY_CONTACT.googleMapsUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors"
+                title="Google Maps Location"
+              >
                 <Globe className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors">
-                <Share2 className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors">
-                <Compass className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* Explore Links */}
+          {/* Accommodation Options */}
           <div className="space-y-3">
             <span className="text-xs font-bold text-white uppercase tracking-wider block font-serif">
-              The Residences
+              Accommodations
             </span>
             <ul className="space-y-2 text-xs text-gray-400">
               <li>
-                <Link to="/rooms" className="hover:text-warm-gold transition-colors">Executive Heritage Rooms</Link>
+                <Link to="/rooms" className="hover:text-warm-gold transition-colors">Non-AC Room</Link>
               </li>
               <li>
-                <Link to="/rooms" className="hover:text-warm-gold transition-colors">Deluxe Horizon Suites</Link>
+                <Link to="/rooms" className="hover:text-warm-gold transition-colors">AC Room</Link>
               </li>
               <li>
-                <Link to="/rooms" className="hover:text-warm-gold transition-colors">Grand Presidential Suites</Link>
+                <Link to="/rooms" className="hover:text-warm-gold transition-colors">Three-Bed Room</Link>
               </li>
               <li>
-                <Link to="/villas" className="hover:text-warm-gold transition-colors">Single Room Villas (1 Room)</Link>
+                <Link to="/villas" className="hover:text-warm-gold transition-colors">AC Two-Bedroom Villa</Link>
               </li>
               <li>
-                <Link to="/villas" className="hover:text-warm-gold transition-colors">2-Room Executive Villas</Link>
-              </li>
-              <li>
-                <Link to="/villas" className="hover:text-warm-gold transition-colors">3 & 4-Room Family Villas</Link>
+                <Link to="/villas" className="hover:text-warm-gold transition-colors">One-Room Villa</Link>
               </li>
             </ul>
           </div>
 
-          {/* Guest Amenities */}
+          {/* Essential Facilities */}
           <div className="space-y-3">
             <span className="text-xs font-bold text-white uppercase tracking-wider block font-serif">
-              Residency Amenities
+              Essential Facilities
             </span>
             <ul className="space-y-2 text-xs text-gray-400">
               <li>
-                <span className="text-gray-300">Free Covered & Valet Parking</span>
+                <span className="text-gray-300">Free Wi-Fi</span>
               </li>
               <li>
-                <span className="text-gray-300">High-Speed Wi-Fi in All Rooms</span>
+                <span className="text-gray-300">Hot Water Facility</span>
               </li>
               <li>
-                <span className="text-gray-300">Water Heater / Geyser in All Baths</span>
+                <span className="text-gray-300">Parking Facility</span>
               </li>
               <li>
-                <span className="text-gray-300">24/7 Power Backup & Security</span>
+                <span className="text-gray-300">TV in Accommodation</span>
               </li>
               <li>
-                <Link to="/about" className="hover:text-warm-gold transition-colors">24/7 Concierge & Front Desk</Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-warm-gold transition-colors">Frequently Asked Questions</Link>
+                <span className="text-gray-300">Power Backup</span>
               </li>
             </ul>
           </div>
@@ -145,15 +139,14 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Bottom Legal & Credits */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-gray-500">
-          <div>
-            © {new Date().getFullYear()} TV Residency Luxury Resort & Enclave. All rights reserved.
-          </div>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-gray-400 transition-colors">Terms of Hospitality</a>
-            <a href="#" className="hover:text-gray-400 transition-colors">Best Rate Guarantee</a>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+          <p>© 2026 TV Residency, Kottakkal. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link to="/about" className="hover:text-warm-gold transition-colors">About Us</Link>
+            <Link to="/rooms" className="hover:text-warm-gold transition-colors">Rooms</Link>
+            <Link to="/villas" className="hover:text-warm-gold transition-colors">Villas</Link>
+            <Link to="/contact" className="hover:text-warm-gold transition-colors">Contact</Link>
           </div>
         </div>
 

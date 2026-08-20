@@ -42,19 +42,14 @@ export const MyBookingsPage: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end pb-6 border-b border-gray-100 dark:border-white/10 gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em]">
-                Guest Portal
-              </span>
-              <span className="bg-warm-gold text-primary text-[10px] font-bold px-2 py-0.5 rounded">
-                {user.membershipTier} Member
-              </span>
-            </div>
+            <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block">
+              Guest Bookings
+            </span>
             <h1 className="font-serif text-3xl font-bold text-primary dark:text-white mt-1">
-              My Confirmed Reservations
+              My Reservations
             </h1>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Account: {user.name} ({user.email})
+              {user.name} • Mobile: {user.phone}
             </p>
           </div>
 
@@ -62,7 +57,7 @@ export const MyBookingsPage: React.FC = () => {
             to="/rooms"
             className="px-4 py-2 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-primary dark:hover:bg-gold-light transition-all flex items-center gap-1.5 shadow-sm"
           >
-            <span>Book New Sanctuary</span>
+            <span>Book A Stay</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

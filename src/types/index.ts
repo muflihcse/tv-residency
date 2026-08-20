@@ -4,14 +4,21 @@ export interface Property {
   id: string;
   name: string;
   type: PropertyType;
-  category: 'deluxe' | 'suite' | 'villa' | 'presidential' | 'heritage';
+  category: string;
   tagline: string;
   description: string;
   longDescription: string;
   priceINR: number;
   originalPriceINR?: number;
-  rating: number;
-  reviewCount: number;
+  isPriceContactBased?: boolean;
+  inventoryCount: number;
+  isAC: boolean;
+  hasHall?: boolean;
+  hasKitchen?: boolean;
+  hasStove?: boolean;
+  hasSitout?: boolean;
+  rating?: number;
+  reviewCount?: number;
   location: string;
   address: string;
   maxGuests: number;
@@ -19,11 +26,11 @@ export interface Property {
   children: number;
   bedrooms: number;
   bathrooms: number;
-  sqft: number;
+  sqft?: number;
   bedType: string;
-  hasPool: boolean;
+  hasPool?: boolean;
   poolType?: string;
-  view: string;
+  view?: string;
   featured: boolean;
   badge?: string;
   images: string[];
@@ -55,7 +62,7 @@ export interface SpecialOffer {
   title: string;
   code: string;
   badge: string;
-  discountPercent: number;
+  discountPercent?: number;
   description: string;
   perks: string[];
   validUntil: string;
@@ -67,12 +74,12 @@ export interface SpecialOffer {
 export interface NearbyPlace {
   id: string;
   name: string;
-  category: 'beach' | 'culture' | 'dining' | 'nature' | 'transport';
+  category: 'health' | 'culture' | 'town' | 'transport' | string;
   distance: string;
   travelTime: string;
   description: string;
   image: string;
-  rating: number;
+  rating?: number;
 }
 
 export interface Currency {
@@ -84,12 +91,10 @@ export interface Currency {
 
 export interface User {
   id: string;
+  phone: string;
   name: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
-  membershipTier: 'Silver' | 'Gold' | 'Platinum';
-  joinedDate: string;
+  email?: string;
+  joinedDate?: string;
 }
 
 export interface Booking {

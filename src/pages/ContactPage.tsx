@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, Navigation, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, Navigation, ExternalLink } from 'lucide-react';
 import { useResidency } from '../context/ResidencyContext';
 import { RESIDENCY_CONTACT } from '../data/residencyData';
 
@@ -9,7 +9,7 @@ export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [subject, setSubject] = useState('Sanctuary Suite Inquiry');
+  const [subject, setSubject] = useState('Room / Villa Booking Enquiry');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -19,7 +19,7 @@ export const ContactPage: React.FC = () => {
 
     setTimeout(() => {
       setIsSubmitting(false);
-      showToast('Inquiry received! Our Chief Butler will connect with you within 2 hours.', 'gold');
+      showToast('Enquiry received! We will get back to you shortly.', 'gold');
       setName('');
       setEmail('');
       setPhone('');
@@ -34,14 +34,14 @@ export const ContactPage: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block mb-2">
-            Connect With TV Residency
+            Get in Touch
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary dark:text-white tracking-tight">
-            Concierge & Inquiries
+            Contact & Enquiries
           </h1>
           <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3 mb-4"></div>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            Our dedicated hospitality team is available 24/7 to assist with room bookings, private villa reservations, and bespoke Kerala stays.
+            Contact us for availability, room details and booking enquiries.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const ContactPage: React.FC = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <span className="text-[10px] font-bold text-warm-gold uppercase tracking-widest block mb-1">
-                    Official Location Card
+                    Property Location
                   </span>
                   <h2 className="font-serif text-2xl font-bold text-primary dark:text-white">
                     {RESIDENCY_CONTACT.name}
@@ -100,7 +100,7 @@ export const ContactPage: React.FC = () => {
                 href={RESIDENCY_CONTACT.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3.5 bg-gradient-to-r from-deep-navy to-primary hover:from-primary hover:to-deep-navy dark:from-warm-gold dark:to-gold-light text-white dark:text-primary rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                className="w-full py-3.5 bg-gradient-to-r from-deep-navy to-primary hover:from-primary hover:to-deep-navy dark:from-warm-gold dark:to-gold-light text-white dark:text-primary rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all text-center"
               >
                 <span>📍 View on Google Maps →</span>
               </a>
@@ -112,7 +112,7 @@ export const ContactPage: React.FC = () => {
                     <Phone className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="font-bold text-primary dark:text-white block">Official Contact Number</span>
+                    <span className="font-bold text-primary dark:text-white block">Contact Number</span>
                     <a href={`tel:${RESIDENCY_CONTACT.phone}`} className="text-warm-gold hover:underline font-mono font-bold text-base">
                       {RESIDENCY_CONTACT.phone}
                     </a>
@@ -124,121 +124,109 @@ export const ContactPage: React.FC = () => {
                     <Mail className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="font-bold text-primary dark:text-white block">Email Reservations</span>
+                    <span className="font-bold text-primary dark:text-white block">Email Enquiry</span>
                     <a href={`mailto:${RESIDENCY_CONTACT.email}`} className="text-warm-gold hover:underline">
                       {RESIDENCY_CONTACT.email}
                     </a>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-warm-gold/15 text-warm-gold flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-primary dark:text-white block">Front Desk & Concierge</span>
-                    <p className="text-gray-500 dark:text-gray-400 mt-0.5">
-                      24 Hours a Day • 7 Days a Week
-                    </p>
-                  </div>
-                </div>
               </div>
+
             </div>
 
           </div>
 
           {/* Form Side (7 cols) */}
-          <div className="lg:col-span-7 bg-white dark:bg-[#15171C] p-6 sm:p-8 rounded-2xl border border-soft-beige/70 dark:border-white/10 shadow-level-2">
-            <h2 className="font-serif text-xl font-bold text-primary dark:text-white mb-2">
-              Send an Inquiry
-            </h2>
+          <div className="lg:col-span-7 bg-white dark:bg-[#15171C] p-6 sm:p-10 rounded-2xl border border-gray-100 dark:border-white/10 shadow-level-2">
+            <h3 className="font-serif text-2xl font-bold text-primary dark:text-white mb-2">
+              Send an Enquiry
+            </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
-              Our reservation specialists will respond within 2 hours with customized rates and availability.
+              Contact us for availability, room details and booking enquiries.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
-                    Your Name *
+                  <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
+                    Your Full Name *
                   </label>
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Rahul Sharma"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Eleanor Vance"
-                    className="w-full py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-warm-gold"
                   />
                 </div>
-                <div>
-                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. eleanor@vance.com"
-                    className="w-full py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
-                    Phone / WhatsApp *
+                  <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
+                    Phone Number *
                   </label>
                   <input
                     type="tel"
                     required
+                    placeholder="e.g. +91 98765 43210"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+91 98470 12345"
-                    className="w-full py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-warm-gold"
                   />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
-                    Inquiry Topic
-                  </label>
-                  <select
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    className="w-full py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
-                  >
-                    <option>Sanctuary Suite Inquiry</option>
-                    <option>Private Pool Villa Reservation</option>
-                    <option>Family & Group Stay Package</option>
-                    <option>Corporate & Business Stay</option>
-                    <option>Private Event & Celebration</option>
-                  </select>
                 </div>
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
-                  Message / Requirements *
+                <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-warm-gold"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
+                  Accommodation Interest
+                </label>
+                <select
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
+                >
+                  <option value="Non-AC Room (₹1,000 / night)">Non-AC Room (₹1,000 / night)</option>
+                  <option value="AC Room (₹1,500 / night)">AC Room (₹1,500 / night)</option>
+                  <option value="Three-Bed Room (₹1,700 / night)">Three-Bed Room (₹1,700 / night)</option>
+                  <option value="AC Two-Bedroom Villa (₹4,000 / night)">AC Two-Bedroom Villa (₹4,000 / night)</option>
+                  <option value="One-Room Villa (₹3,000 / night)">One-Room Villa (₹3,000 / night)</option>
+                  <option value="General Enquiry">General Enquiry</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
+                  Message / Requirements
                 </label>
                 <textarea
                   rows={4}
-                  required
+                  placeholder="Please mention dates, number of guests, or special requirements..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Please specify your desired travel dates, number of guests, or special requirements..."
-                  className="w-full py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-warm-gold"
+                  className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-warm-gold"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-primary dark:hover:bg-gold-light transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]"
+                className="w-full py-3.5 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary dark:hover:bg-gold-light transition-all shadow-md flex items-center justify-center gap-2"
               >
-                <Send className="w-4 h-4" />
-                <span>{isSubmitting ? 'Sending to Concierge...' : 'Submit Inquiry'}</span>
+                <Send className="w-3.5 h-3.5" />
+                <span>{isSubmitting ? 'Sending Enquiry...' : 'Submit Enquiry'}</span>
               </button>
             </form>
           </div>

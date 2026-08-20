@@ -3,22 +3,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import type { Property } from '../types';
 import { useResidency } from '../context/ResidencyContext';
 import { useAuth } from '../context/AuthContext';
-import { Star, Heart, Users, Bed, ArrowRight, Check } from 'lucide-react';
+import { Heart, Users, Bed, ArrowRight, Check, AlertCircle } from 'lucide-react';
 
 interface PropertyCardProps {
   property: Property;
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
-  const { formatPrice, isFavorite, toggleFavorite } = useResidency();
+  const { formatPrice, isFavorite, toggleFavorite, getAvailableUnits, isFullyBooked } = useResidency();
   const { isAuthenticated, openLoginModal } = useAuth();
   const navigate = useNavigate();
 
   const fav = isFavorite(property.id);
+  const availableUnits = getAvailableUnits(property.id);
+  const fullyBooked = isFullyBooked(property.id);
 
   const handleReserveClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+    if (fullyBooked) return;
+
     if (!isAuthenticated) {
       openLoginModal(`/booking/${property.id}`);
     } else {
@@ -27,14 +31,18 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   };
 
   return (
-    <article className="bg-white dark:bg-[#15171C] rounded-2xl overflow-hidden shadow-level-2 hover:shadow-level-3 border border-gray-100 dark:border-white/10 flex flex-col group transition-all duration-500 hover:-translate-y-1.5">
+    <article className={`bg-white dark:bg-[#15171C] rounded-2xl overflow-hidden shadow-level-2 hover:shadow-level-3 border flex flex-col group transition-all duration-500 hover:-translate-y-1.5 ${
+      fullyBooked ? 'border-red-300 dark:border-red-900/40 opacity-90' : 'border-gray-100 dark:border-white/10'
+    }`}>
       
       {/* Image Container */}
       <Link to={`/property/${property.id}`} className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-800 block">
         <img
           src={property.images[0] || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80'}
           alt={property.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
+            fullyBooked ? 'grayscale-[30%] group-hover:scale-100' : 'group-hover:scale-105'
+          }`}
           loading="lazy"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80';
@@ -43,9 +51,28 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 
         {/* Top Badges */}
         <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-2">
-          {property.badge && (
+          {fullyBooked ? (
+            <span className="bg-red-600 text-white backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-md flex items-center gap-1 animate-pulse">
+              <AlertCircle className="w-3 h-3" />
+              <span>Fully Booked</span>
+            </span>
+          ) : availableUnits === 1 ? (
+            <span className="bg-amber-500 text-primary backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+              Only 1 Unit Left!
+            </span>
+          ) : (
             <span className="bg-white/95 dark:bg-black/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-primary dark:text-warm-gold uppercase tracking-wider shadow-sm border border-warm-gold/30">
-              {property.badge}
+              {availableUnits} Available
+            </span>
+          )}
+
+          {property.isAC ? (
+            <span className="bg-deep-navy/90 text-warm-gold text-[10px] font-bold px-2 py-0.5 rounded backdrop-blur-sm">
+              AC
+            </span>
+          ) : (
+            <span className="bg-gray-800/90 text-gray-200 text-[10px] font-bold px-2 py-0.5 rounded backdrop-blur-sm">
+              Non-AC
             </span>
           )}
         </div>
@@ -73,24 +100,16 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       {/* Card Content */}
       <div className="p-5 sm:p-6 flex flex-col flex-1 gap-3.5">
         
-        {/* Title & Rating */}
-        <div className="flex justify-between items-start gap-2">
-          <div>
-            <Link to={`/property/${property.id}`}>
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-primary dark:text-white group-hover:text-warm-gold transition-colors line-clamp-1">
-                {property.name}
-              </h3>
-            </Link>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">
-              {property.tagline}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-1 bg-soft-beige/60 dark:bg-white/10 px-2 py-1 rounded-md flex-shrink-0">
-            <Star className="w-3.5 h-3.5 fill-warm-gold text-warm-gold" />
-            <span className="text-xs font-bold text-gray-900 dark:text-white">{property.rating.toFixed(2)}</span>
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">({property.reviewCount})</span>
-          </div>
+        {/* Title & Tagline */}
+        <div>
+          <Link to={`/property/${property.id}`}>
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-primary dark:text-white group-hover:text-warm-gold transition-colors line-clamp-1">
+              {property.name}
+            </h3>
+          </Link>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">
+            {property.tagline}
+          </p>
         </div>
 
         {/* Specs Pill Row */}
@@ -104,8 +123,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             <Bed className="w-3.5 h-3.5 text-warm-gold" />
             <span>{property.bedType}</span>
           </span>
-          <span>•</span>
-          <span>{property.sqft} sqft</span>
         </div>
 
         {/* Short Description */}
@@ -136,11 +153,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-400">/night</span>
             </div>
-            {property.originalPriceINR && (
-              <span className="text-[11px] text-gray-400 line-through block">
-                {formatPrice(property.originalPriceINR)}
-              </span>
-            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -150,13 +162,24 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             >
               Details
             </Link>
-            <button
-              onClick={handleReserveClick}
-              className="h-9 px-4 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary rounded-lg text-xs font-bold hover:bg-primary dark:hover:bg-gold-light transition-all shadow-sm flex items-center gap-1"
-            >
-              <span>Reserve</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+
+            {fullyBooked ? (
+              <button
+                disabled
+                className="h-9 px-4 bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg text-xs font-bold cursor-not-allowed shadow-none flex items-center gap-1"
+                title="This accommodation is fully booked"
+              >
+                <span>Full Booked</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleReserveClick}
+                className="h-9 px-4 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary rounded-lg text-xs font-bold hover:bg-primary dark:hover:bg-gold-light transition-all shadow-sm flex items-center gap-1"
+              >
+                <span>Reserve</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 

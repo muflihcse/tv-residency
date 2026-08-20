@@ -8,11 +8,10 @@ export const RoomsPage: React.FC = () => {
   const { formatPrice } = useResidency();
   
   const [searchQuery, setSearchQuery] = useState('');
-  const [maxPrice, setMaxPrice] = useState(25000);
+  const [maxPrice, setMaxPrice] = useState(2500);
   const [selectedGuests, setSelectedGuests] = useState<number>(0);
-  const [minRating, setMinRating] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'recommended' | 'price-asc' | 'price-desc' | 'rating'>('recommended');
+  const [sortBy, setSortBy] = useState<'recommended' | 'price-asc' | 'price-desc'>('recommended');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   const roomsList = useMemo(() => {
@@ -28,12 +27,11 @@ export const RoomsPage: React.FC = () => {
       result = result.filter(r => 
         r.name.toLowerCase().includes(q) ||
         r.description.toLowerCase().includes(q) ||
-        r.view.toLowerCase().includes(q) ||
         r.location.toLowerCase().includes(q)
       );
     }
 
-    // Category
+    // Category / AC Filter
     if (selectedCategory !== 'all') {
       result = result.filter(r => r.category === selectedCategory);
     }
@@ -46,28 +44,20 @@ export const RoomsPage: React.FC = () => {
       result = result.filter(r => r.maxGuests >= selectedGuests);
     }
 
-    // Min Rating
-    if (minRating > 0) {
-      result = result.filter(r => r.rating >= minRating);
-    }
-
     // Sorting
     if (sortBy === 'price-asc') {
       result.sort((a, b) => a.priceINR - b.priceINR);
     } else if (sortBy === 'price-desc') {
       result.sort((a, b) => b.priceINR - a.priceINR);
-    } else if (sortBy === 'rating') {
-      result.sort((a, b) => b.rating - a.rating);
     }
 
     return result;
-  }, [roomsList, searchQuery, selectedCategory, maxPrice, selectedGuests, minRating, sortBy]);
+  }, [roomsList, searchQuery, selectedCategory, maxPrice, selectedGuests, sortBy]);
 
   const handleReset = () => {
     setSearchQuery('');
-    setMaxPrice(25000);
+    setMaxPrice(2500);
     setSelectedGuests(0);
-    setMinRating(0);
     setSelectedCategory('all');
     setSortBy('recommended');
   };
@@ -79,14 +69,14 @@ export const RoomsPage: React.FC = () => {
         {/* Page Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block mb-2">
-            Refined Accommodations
+            Comfortable Accommodations
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary dark:text-white tracking-tight">
-            Rooms & Ocean Suites
+            Rooms at TV Residency
           </h1>
           <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3 mb-4"></div>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            Browse our collection of 6 luxury rooms and suites at TV Residency, Collegepadi, Kottakkal.
+            Non-AC, AC, and three-bed rooms with essential amenities in Kottakkal.
           </p>
         </div>
 
@@ -98,7 +88,7 @@ export const RoomsPage: React.FC = () => {
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by room name, view, or feature..."
+              placeholder="Search by room name or feature..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-warm-gold"
@@ -133,7 +123,6 @@ export const RoomsPage: React.FC = () => {
                 <option value="recommended">Featured Order</option>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
-                <option value="rating">Top Rated (Stars)</option>
               </select>
             </div>
           </div>
@@ -160,10 +149,10 @@ export const RoomsPage: React.FC = () => {
               </label>
               <div className="space-y-1.5">
                 {[
-                  { id: 'all', label: 'All Categories' },
-                  { id: 'deluxe', label: 'Deluxe Rooms' },
-                  { id: 'suite', label: 'Suites & Penthouses' },
-                  { id: 'presidential', label: 'Presidential Suites' },
+                  { id: 'all', label: 'All Room Types' },
+                  { id: 'non-ac', label: 'Non-AC Room (₹1,000)' },
+                  { id: 'ac', label: 'AC Room (₹1,500)' },
+                  { id: 'triple', label: 'Three-Bed Room (₹1,700)' },
                 ].map((cat) => (
                   <button
                     key={cat.id}
@@ -188,16 +177,16 @@ export const RoomsPage: React.FC = () => {
               </div>
               <input
                 type="range"
-                min="6000"
-                max="25000"
-                step="1000"
+                min="1000"
+                max="2500"
+                step="100"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-warm-gold cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                <span>₹6,000</span>
-                <span>₹25,000+</span>
+                <span>₹1,000</span>
+                <span>₹2,500</span>
               </div>
             </div>
 
@@ -206,8 +195,8 @@ export const RoomsPage: React.FC = () => {
               <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
                 Guest Capacity
               </label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {[0, 2, 4, 6].map((num) => (
+              <div className="grid grid-cols-3 gap-1.5">
+                {[0, 2, 3].map((num) => (
                   <button
                     key={num}
                     onClick={() => setSelectedGuests(num)}
@@ -222,38 +211,12 @@ export const RoomsPage: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            {/* Rating Filter */}
-            <div>
-              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
-                Guest Rating
-              </label>
-              <div className="space-y-1">
-                {[
-                  { val: 0, label: 'All Ratings' },
-                  { val: 4.8, label: '★ 4.8 & above' },
-                  { val: 4.9, label: '★ 4.9 & above (Exceptional)' },
-                ].map((r) => (
-                  <button
-                    key={r.val}
-                    onClick={() => setMinRating(r.val)}
-                    className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                      minRating === r.val
-                        ? 'bg-soft-beige/60 dark:bg-warm-gold/20 text-warm-gold font-bold'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
-                    }`}
-                  >
-                    {r.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </aside>
 
           {/* Rooms Grid (9 cols) */}
           <div className="lg:col-span-9 space-y-6">
             <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-              <span>Showing <strong className="text-primary dark:text-white">{filteredRooms.length}</strong> available rooms</span>
+              <span>Showing <strong className="text-primary dark:text-white">{filteredRooms.length}</strong> available room types</span>
             </div>
 
             {filteredRooms.length === 0 ? (
@@ -263,7 +226,7 @@ export const RoomsPage: React.FC = () => {
                   No rooms match your filter criteria
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-5">
-                  Try adjusting your price range or guest count to discover available suites.
+                  Try adjusting your price range or guest count.
                 </p>
                 <button
                   onClick={handleReset}

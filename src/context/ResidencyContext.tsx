@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import type { Currency, SearchFilterState, Property } from '../types';
 import { CURRENCIES, PROPERTIES } from '../data/residencyData';
+import { useAuth } from './AuthContext';
 
 export interface ToastNotification {
   id: string;
@@ -16,6 +17,10 @@ interface ResidencyContextType {
   formatPrice: (inrAmount: number) => string;
   rawConvert: (inrAmount: number) => number;
   
+  // Real-time Inventory & Availability
+  getAvailableUnits: (propertyId: string) => number;
+  isFullyBooked: (propertyId: string) => boolean;
+
   // Search State
   searchFilters: SearchFilterState;
   setSearchFilters: React.Dispatch<React.SetStateAction<SearchFilterState>>;
@@ -64,7 +69,7 @@ const defaultSearchFilters: SearchFilterState = {
   children: 0,
   rooms: 1,
   propertyType: 'all',
-  priceRange: [5000, 40000],
+  priceRange: [1000, 5000],
   minRating: 0,
   selectedAmenities: [],
   sortBy: 'recommended',
@@ -73,6 +78,8 @@ const defaultSearchFilters: SearchFilterState = {
 const ResidencyContext = createContext<ResidencyContextType | undefined>(undefined);
 
 export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { userBookings } = useAuth();
+
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('tv_theme') === 'dark';
   });
@@ -99,12 +106,12 @@ export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           nextDay.setDate(nextDay.getDate() + 1);
           parsed.checkOut = nextDay.toISOString().split('T')[0];
         }
-        return { ...defaultSearchFilters, ...parsed };
+        return parsed;
       }
-      return defaultSearchFilters;
     } catch {
-      return defaultSearchFilters;
+      // safe fallback
     }
+    return defaultSearchFilters;
   });
 
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -120,6 +127,7 @@ export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isConciergeOpen, setIsConciergeOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
 
+  // Apply dark mode class to root html
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -130,32 +138,56 @@ export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, [darkMode]);
 
+  // Persist search filters
   useEffect(() => {
     localStorage.setItem('tv_search_filters', JSON.stringify(searchFilters));
   }, [searchFilters]);
+
+  // Persist favorites
+  useEffect(() => {
+    localStorage.setItem('tv_favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);
   };
 
+  const currency = useMemo(() => {
+    return CURRENCIES[currencyCode] || CURRENCIES.INR;
+  }, [currencyCode]);
+
   const setCurrencyCode = (code: string) => {
-    if (CURRENCIES[code]) {
-      setCurrencyCodeState(code);
-      localStorage.setItem('tv_currency', code);
-      showToast(`Currency changed to ${CURRENCIES[code].name} (${CURRENCIES[code].symbol})`, 'gold');
-    }
+    setCurrencyCodeState(code);
+    localStorage.setItem('tv_currency', code);
   };
 
-  const currency = CURRENCIES[currencyCode] || CURRENCIES.INR;
-
-  const rawConvert = (inrAmount: number): number => {
+  const rawConvert = useCallback((inrAmount: number): number => {
     return Math.round(inrAmount * currency.rateAgainstINR);
-  };
+  }, [currency.rateAgainstINR]);
 
-  const formatPrice = (inrAmount: number): string => {
-    const converted = Math.round(inrAmount * currency.rateAgainstINR);
+  const formatPrice = useCallback((inrAmount: number): string => {
+    if (inrAmount === 0) return 'Contact Desk';
+    const converted = rawConvert(inrAmount);
     return `${currency.symbol}${converted.toLocaleString('en-IN')}`;
-  };
+  }, [currency.symbol, rawConvert]);
+
+  // Real-time Inventory & Availability Calculation
+  const getAvailableUnits = useCallback((propertyId: string): number => {
+    const prop = PROPERTIES.find(p => p.id === propertyId);
+    if (!prop) return 0;
+    const initial = prop.inventoryCount;
+    
+    // Count active confirmed rooms booked for this property
+    const bookedRoomsCount = userBookings
+      .filter(b => b.propertyId === propertyId && b.status === 'confirmed')
+      .reduce((sum, b) => sum + (b.guests?.rooms || 1), 0);
+
+    return Math.max(0, initial - bookedRoomsCount);
+  }, [userBookings]);
+
+  const isFullyBooked = useCallback((propertyId: string): boolean => {
+    return getAvailableUnits(propertyId) <= 0;
+  }, [getAvailableUnits]);
 
   const updateSearchFilters = (partial: Partial<SearchFilterState>) => {
     setSearchFilters(prev => ({ ...prev, ...partial }));
@@ -168,16 +200,9 @@ export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const toggleFavorite = (propertyId: string) => {
     setFavorites(prev => {
       const exists = prev.includes(propertyId);
-      const updated = exists ? prev.filter(id => id !== propertyId) : [...prev, propertyId];
-      localStorage.setItem('tv_favorites', JSON.stringify(updated));
-      const property = PROPERTIES.find(p => p.id === propertyId);
-      const name = property ? property.name : 'Property';
-      if (exists) {
-        showToast(`Removed "${name}" from saved list`, 'info');
-      } else {
-        showToast(`Added "${name}" to your wishlist`, 'gold');
-      }
-      return updated;
+      const next = exists ? prev.filter(id => id !== propertyId) : [...prev, propertyId];
+      showToast(exists ? 'Removed from saved list' : 'Saved to your favorites', exists ? 'info' : 'gold');
+      return next;
     });
   };
 
@@ -209,6 +234,8 @@ export const ResidencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setCurrencyCode,
         formatPrice,
         rawConvert,
+        getAvailableUnits,
+        isFullyBooked,
         searchFilters,
         setSearchFilters,
         updateSearchFilters,

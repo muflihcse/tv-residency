@@ -1,56 +1,54 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, Compass, HeartHandshake, Leaf, Building2, Sparkles, MapPin } from 'lucide-react';
-import { useResidency } from '../context/ResidencyContext';
+import { ChevronDown, HeartHandshake, Building2, MapPin, CheckCircle2, Phone } from 'lucide-react';
 import { RESIDENCY_CONTACT } from '../data/residencyData';
 
 export const AboutPage: React.FC = () => {
-  const { toggleConcierge } = useResidency();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const values = [
     {
       icon: HeartHandshake,
-      title: 'Attentive Hospitality',
-      description: 'We believe thoughtful service creates a comfortable, memorable stay. Our team is available 24/7 to assist you.'
-    },
-    {
-      icon: Leaf,
-      title: 'Serene Natural Setting',
-      description: 'Lush greenery, peaceful garden sit-outs, and clean, thoughtfully maintained spaces.'
+      title: 'Comfortable Hospitality',
+      description: 'A comfortable stay supported by attentive service and a welcoming, respectful atmosphere in Kottakkal.'
     },
     {
       icon: Building2,
-      title: 'Architectural Comfort',
-      description: 'Blending contemporary Kerala aesthetics with modern room design, private verandahs, and calm interiors.'
+      title: 'Rooms & Villas Options',
+      description: 'Choice of Non-AC, AC, and three-bed rooms along with spacious AC two-bedroom villas and one-room villas.'
     },
     {
-      icon: Sparkles,
-      title: 'Dedicated 24/7 Guest Care',
-      description: 'Round-the-clock front desk assistance, pristine housekeeping, fast check-in, and personalized hospitality support.'
+      icon: MapPin,
+      title: 'Convenient Town Location',
+      description: 'Located in Collegepadi, Kottakkal, immediately near Ahalya Eye Hospital with convenient town connectivity.'
+    },
+    {
+      icon: CheckCircle2,
+      title: 'Essential Facilities',
+      description: 'Equipped with Wi-Fi, hot water facility, parking, TV, and power backup for peace of mind.'
     }
   ];
 
   const faqs = [
     {
-      q: 'What are the check-in and check-out policies?',
-      a: 'Standard check-in begins at 14:00 and check-out is until 11:00 AM. Flexible early check-in and late 15:00 check-out are available upon request subject to availability.'
-    },
-    {
       q: 'Where is TV Residency located and how do I contact you?',
-      a: 'TV Residency is located at Collegepadi, Kottakkal, Near Ahalya Eye Hospital. You can reach our 24/7 desk directly at 8281628559 or find us on Google Maps.'
+      a: 'TV Residency is located at Collegepadi, Kottakkal, Near Ahalya Eye Hospital. You can reach our front desk directly at 8281628559 or find us on Google Maps.'
     },
     {
-      q: 'Are dietary requirements and custom menus accommodated?',
-      a: 'Yes. Our culinary team caters to Vegetarian, Non-Vegetarian, and custom dietary requests with freshly prepared dishes.'
+      q: 'What room categories and prices are available?',
+      a: 'We offer Non-AC Rooms (₹1,000 / night, 3 rooms), AC Rooms (₹1,500 / night, 3 rooms), and a Three-Bed Room (₹1,700 / night, 1 room).'
     },
     {
-      q: 'Is there a private butler for all residences?',
-      a: 'All 6 Private Villas and Presidential Suites include 24/7 dedicated butler service. Deluxe rooms include dedicated on-demand concierge and valet care.'
+      q: 'What villa accommodation and rates are available?',
+      a: 'We have 6 villas in total: 4 AC two-bedroom villas at ₹4,000 / night (featuring a hall, kitchen with stove, 2 rooms, bathroom, and sit-out) and 2 one-room villas at ₹3,000 / night (featuring one room, hall, kitchen, and bathroom).'
     },
     {
-      q: 'What is the cancellation and refund policy?',
-      a: 'Reservations can be modified or cancelled free of charge up to 48 to 72 hours prior to arrival with a 100% refund guarantee.'
+      q: 'What are the confirmed amenities provided?',
+      a: 'TV Residency provides Free Wi-Fi, Hot Water facility, Parking, TV, and Power Backup.'
+    },
+    {
+      q: 'What are the check-in and check-out timings?',
+      a: 'Standard check-in begins from 12:00 PM and check-out is until 11:00 AM. Valid government ID is required at check-in.'
     }
   ];
 
@@ -100,30 +98,30 @@ export const AboutPage: React.FC = () => {
                 to="/rooms"
                 className="px-6 py-3 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-primary dark:hover:bg-gold-light transition-all shadow-sm"
               >
-                Explore The Residences
+                Explore Rooms & Villas
               </Link>
-              <button
-                onClick={toggleConcierge}
+              <a
+                href={`tel:${RESIDENCY_CONTACT.phone}`}
                 className="px-6 py-3 border border-warm-gold text-warm-gold hover:bg-warm-gold hover:text-primary rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2"
               >
-                <Compass className="w-4 h-4" />
-                <span>Speak with Concierge</span>
-              </button>
+                <Phone className="w-4 h-4" />
+                <span>Call {RESIDENCY_CONTACT.phone}</span>
+              </a>
             </div>
           </div>
 
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-level-3 border-2 border-white dark:border-white/10 aspect-[4/3]">
               <img
-                src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
-                alt="TV Residency Architecture & Heritage Estate"
+                src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80"
+                alt="TV Residency Kottakkal Accommodation"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="hidden sm:block absolute -bottom-6 -right-6 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary p-6 rounded-2xl shadow-level-3 max-w-xs border border-warm-gold/40">
-              <div className="font-serif text-3xl font-bold mb-1">100%</div>
+              <div className="font-serif text-2xl font-bold mb-1">TV Residency</div>
               <div className="text-xs font-semibold uppercase tracking-wider">
-                Carbon Neutral & Solar-Powered Sanctuary
+                Collegepadi, Kottakkal
               </div>
             </div>
           </div>
@@ -133,22 +131,23 @@ export const AboutPage: React.FC = () => {
         <div className="space-y-10">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block mb-2">
-              Our Core Pillars
+              Our Core Values
             </span>
             <h2 className="font-serif text-3xl font-bold text-primary dark:text-white">
-              The TV Residency Service Philosophy
+              Why Guests Choose TV Residency
             </h2>
+            <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3"></div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((v) => {
+            {values.map((v, i) => {
               const Icon = v.icon;
               return (
                 <div
-                  key={v.title}
-                  className="bg-white dark:bg-[#15171C] p-7 rounded-2xl border border-soft-beige/70 dark:border-white/5 shadow-sm space-y-3"
+                  key={i}
+                  className="p-6 rounded-2xl bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 shadow-sm space-y-3"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-soft-beige/70 dark:bg-warm-gold/10 flex items-center justify-center text-warm-gold">
+                  <div className="w-12 h-12 rounded-xl bg-warm-gold/10 text-warm-gold flex items-center justify-center">
                     <Icon className="w-6 h-6" />
                   </div>
                   <h3 className="font-serif font-bold text-base text-primary dark:text-white">
@@ -164,46 +163,39 @@ export const AboutPage: React.FC = () => {
         </div>
 
         {/* FAQs Accordion */}
-        <div className="max-w-3xl mx-auto space-y-8 pt-8 border-t border-gray-100 dark:border-white/10">
+        <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center">
             <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block mb-2">
-              Guest Inquiries
+              Common Enquiries
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary dark:text-white">
+            <h2 className="font-serif text-3xl font-bold text-primary dark:text-white">
               Frequently Asked Questions
             </h2>
+            <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3"></div>
           </div>
 
-          <div className="space-y-3.5">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaqIndex === idx;
-              return (
-                <div
-                  key={idx}
-                  className="bg-white dark:bg-[#15171C] rounded-2xl border border-soft-beige/70 dark:border-white/10 overflow-hidden shadow-sm transition-all"
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 rounded-xl overflow-hidden shadow-sm"
+              >
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                  className="w-full p-4 text-left flex justify-between items-center gap-4 text-xs sm:text-sm font-bold text-primary dark:text-white"
                 >
-                  <button
-                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full px-6 py-4.5 text-left flex justify-between items-center gap-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-                  >
-                    <span className="font-serif text-sm font-semibold text-primary dark:text-white">
-                      {faq.q}
-                    </span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-warm-gold flex-shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {isOpen && (
-                    <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-white/5 animate-fade-in">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  <span>{faq.q}</span>
+                  <ChevronDown className={`w-4 h-4 text-warm-gold transition-transform duration-300 flex-shrink-0 ${
+                    openFaqIndex === idx ? 'rotate-180' : ''
+                  }`} />
+                </button>
+                {openFaqIndex === idx && (
+                  <div className="px-4 pb-4 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-50 dark:border-white/5 pt-3 leading-relaxed">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 

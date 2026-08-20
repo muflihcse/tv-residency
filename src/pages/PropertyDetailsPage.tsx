@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PROPERTIES, REVIEWS } from '../data/residencyData';
+import { PROPERTIES, RESIDENCY_CONTACT, REVIEWS } from '../data/residencyData';
 import { BookingCard } from '../components/BookingCard';
 import { useResidency } from '../context/ResidencyContext';
 import { 
-  Star, 
   Heart, 
   Share2, 
   MapPin, 
@@ -12,18 +11,22 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ShieldCheck, 
-  Sparkles, 
   Maximize2, 
   Clock, 
-  CheckCircle2, 
-  X 
+  X,
+  Phone,
+  Star,
+  CheckCircle,
+  Quote
 } from 'lucide-react';
 
 export const PropertyDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isFavorite, toggleFavorite, showToast } = useResidency();
+  const { isFavorite, toggleFavorite, showToast, getAvailableUnits, isFullyBooked } = useResidency();
 
   const property = PROPERTIES.find(p => p.id === id);
+  const availableUnits = property ? getAvailableUnits(property.id) : 0;
+  const fullyBooked = property ? isFullyBooked(property.id) : false;
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [fullscreenGalleryOpen, setFullscreenGalleryOpen] = useState(false);
@@ -32,10 +35,10 @@ export const PropertyDetailsPage: React.FC = () => {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 text-center">
         <h2 className="font-serif text-3xl font-bold text-primary dark:text-white mb-3">
-          Property Not Found
+          Accommodation Not Found
         </h2>
         <p className="text-xs text-gray-500 mb-6">
-          The requested sanctuary residence could not be found in our collection.
+          The requested room or villa could not be found.
         </p>
         <Link
           to="/rooms"
@@ -48,7 +51,10 @@ export const PropertyDetailsPage: React.FC = () => {
   }
 
   const fav = isFavorite(property.id);
-  const propertyReviews = REVIEWS.filter(r => r.propertyId === property.id || !r.propertyId).slice(0, 6);
+
+  // Relevant Kerala guest reviews for this accommodation or general Kerala guests
+  const relatedReviews = REVIEWS.filter(r => r.propertyId === property.id || !r.propertyId);
+  const displayReviews = relatedReviews.length > 0 ? relatedReviews : REVIEWS.slice(0, 2);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -58,7 +64,7 @@ export const PropertyDetailsPage: React.FC = () => {
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(window.location.href);
-      showToast('Property link copied to clipboard!', 'gold');
+      showToast('Link copied to clipboard!', 'gold');
     }
   };
 
@@ -80,7 +86,7 @@ export const PropertyDetailsPage: React.FC = () => {
             <Link to="/" className="hover:text-warm-gold transition-colors">Home</Link>
             <span>/</span>
             <Link to={property.type === 'villa' ? '/villas' : '/rooms'} className="hover:text-warm-gold transition-colors capitalize">
-              {property.type === 'villa' ? 'Private Villas' : 'Rooms & Suites'}
+              {property.type === 'villa' ? 'Villas' : 'Rooms'}
             </Link>
             <span>/</span>
             <span className="text-gray-900 dark:text-white font-semibold truncate max-w-xs">{property.name}</span>
@@ -115,17 +121,20 @@ export const PropertyDetailsPage: React.FC = () => {
                 {property.badge}
               </span>
             )}
+            {property.isAC ? (
+              <span className="bg-deep-navy text-warm-gold font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">
+                AC
+              </span>
+            ) : (
+              <span className="bg-gray-700 text-gray-200 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">
+                Non-AC
+              </span>
+            )}
           </div>
           
           <div className="flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-            <div className="flex items-center gap-1 font-bold text-gray-900 dark:text-white">
-              <Star className="w-4 h-4 fill-warm-gold text-warm-gold" />
-              <span>{property.rating.toFixed(2)}</span>
-              <span className="underline cursor-pointer text-gray-500 font-normal">({property.reviewCount} Verified Reviews)</span>
-            </div>
-            <span>•</span>
             <a
-              href="https://share.google/n1Z6lQmv4DNvdLZXF"
+              href={RESIDENCY_CONTACT.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-warm-gold transition-colors group"
@@ -137,7 +146,7 @@ export const PropertyDetailsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Swiper / Interactive Photo Gallery */}
+        {/* Interactive Photo Gallery */}
         <div className="space-y-3">
           <div className="relative aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden bg-black shadow-level-3">
             <img
@@ -202,48 +211,73 @@ export const PropertyDetailsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start pt-4">
           
           {/* Main Info (8 cols) */}
-          <div className="lg:col-span-8 space-y-10">
+          <div className="lg:col-span-8 space-y-8">
             
-            {/* Quick Specs Strip */}
+            {/* Real Property Breakdown Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 shadow-sm">
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Dimensions</span>
-                <span className="text-sm font-bold text-primary dark:text-white">{property.sqft.toLocaleString()} sqft</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Climate Type</span>
+                <span className="text-sm font-bold text-primary dark:text-white">{property.isAC ? 'Air-Conditioned' : 'Non-AC'}</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Max Guests</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Guest Capacity</span>
                 <span className="text-sm font-bold text-primary dark:text-white">Up to {property.maxGuests} Guests</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Bed Type</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Bed Setup</span>
                 <span className="text-sm font-bold text-primary dark:text-white truncate">{property.bedType}</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Pool & Horizon</span>
-                <span className="text-sm font-bold text-warm-gold">{property.hasPool ? 'Private Pool' : 'Lagoon Pool Access'}</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Available Units</span>
+                <span className={`text-sm font-bold ${fullyBooked ? 'text-red-500 font-semibold' : availableUnits === 1 ? 'text-amber-500' : 'text-warm-gold'}`}>
+                  {fullyBooked ? 'Fully Booked' : `${availableUnits} Available`}
+                </span>
               </div>
             </div>
 
-            {/* Highlights */}
-            <div>
-              <h3 className="text-xs font-bold text-warm-gold uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4" />
-                Residency Key Highlights
+            {/* Comprehensive Features Specification Checklist */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 shadow-sm space-y-4">
+              <h3 className="font-serif text-lg font-bold text-primary dark:text-white">
+                Accommodation Structure & Layout
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {property.highlights.map((h, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3.5 rounded-xl bg-soft-beige/40 dark:bg-white/5 text-xs font-semibold text-gray-800 dark:text-gray-200 border border-warm-gold/20">
-                    <Check className="w-4 h-4 text-warm-gold flex-shrink-0" />
-                    <span>{h}</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <Check className="w-4 h-4 text-warm-gold" />
+                  <span>Type: <strong>{property.type === 'villa' ? 'Villa' : 'Room'}</strong></span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <Check className="w-4 h-4 text-warm-gold" />
+                  <span>Bedrooms: <strong>{property.bedrooms} {property.bedrooms === 1 ? 'Room' : 'Rooms'}</strong></span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <Check className="w-4 h-4 text-warm-gold" />
+                  <span>Bathroom: <strong>{property.bathrooms} Attached</strong></span>
+                </div>
+                {property.hasHall && (
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <Check className="w-4 h-4 text-warm-gold" />
+                    <span>Living Hall: <strong>Included</strong></span>
                   </div>
-                ))}
+                )}
+                {property.hasKitchen && (
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <Check className="w-4 h-4 text-warm-gold" />
+                    <span>Kitchen: <strong>{property.hasStove ? 'Kitchen + Stove' : 'Kitchen Area'}</strong></span>
+                  </div>
+                )}
+                {property.hasSitout && (
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <Check className="w-4 h-4 text-warm-gold" />
+                    <span>Sit-out: <strong>Private Verandah</strong></span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Narrative Description */}
             <div className="space-y-4">
               <h2 className="font-serif text-2xl font-bold text-primary dark:text-white">
-                The Sanctuary Experience
+                Accommodation Description
               </h2>
               <div className="w-12 h-0.5 bg-warm-gold"></div>
               <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -251,11 +285,14 @@ export const PropertyDetailsPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Included Amenities Grid */}
+            {/* Confirmed Amenities Grid */}
             <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-white/10">
               <h3 className="font-serif text-xl font-bold text-primary dark:text-white">
-                In-Villa & Resort Inclusions
+                Essential Facilities
               </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Everything you need for a comfortable and convenient stay.
+              </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {property.amenities.map((amenity, index) => (
                   <div key={index} className="flex items-center gap-2.5 text-xs text-gray-700 dark:text-gray-300">
@@ -269,7 +306,7 @@ export const PropertyDetailsPage: React.FC = () => {
             {/* House Rules & Policies */}
             <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-white/10">
               <h3 className="font-serif text-xl font-bold text-primary dark:text-white">
-                House Rules & Check-In Details
+                Check-In & Stay Guidelines
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-gray-600 dark:text-gray-300">
                 <div className="space-y-2">
@@ -277,8 +314,7 @@ export const PropertyDetailsPage: React.FC = () => {
                     <Clock className="w-4 h-4 text-warm-gold" />
                     <span>Check-in: <strong>{property.checkInTime}</strong> | Check-out: <strong>{property.checkOutTime}</strong></span>
                   </div>
-                  <div>• Government Photo ID required upon registration</div>
-                  <div>• Quiet hours observed after 22:30 in suites</div>
+                  <div>• Valid Government ID required upon registration</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
@@ -289,49 +325,76 @@ export const PropertyDetailsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Verified Reviews Section (20+ reviews preview) */}
-            <div className="space-y-6 pt-6 border-t border-gray-100 dark:border-white/10">
-              <div className="flex justify-between items-center">
+            {/* Kerala Guest Reviews for this Property */}
+            <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-white/10">
+              <div className="flex justify-between items-end">
                 <div>
-                  <h3 className="font-serif text-2xl font-bold text-primary dark:text-white flex items-center gap-2">
-                    <span>Guest Reviews</span>
-                    <span className="text-sm font-sans font-bold text-warm-gold bg-warm-gold/10 px-2.5 py-0.5 rounded-full">
-                      ★ {property.rating.toFixed(2)}
-                    </span>
+                  <h3 className="font-serif text-xl font-bold text-primary dark:text-white">
+                    Feedback from Kerala Guests
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Based on {property.reviewCount} verified guest stays at TV Residency
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Real experiences from guests visiting TV Residency in Kottakkal.
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {propertyReviews.map((rev) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {displayReviews.map((rev) => (
                   <div
                     key={rev.id}
-                    className="p-5 rounded-2xl bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 space-y-2.5 shadow-sm"
+                    className="p-5 rounded-2xl bg-white dark:bg-[#15171C] border border-gray-100 dark:border-white/5 shadow-sm space-y-3 relative"
                   >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="text-xs font-bold text-primary dark:text-white flex items-center gap-1">
-                          <span>{rev.author}</span>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-warm-gold" />
-                        </div>
-                        <div className="text-[10px] text-gray-400">{rev.location} • {rev.stayType}</div>
-                      </div>
-                      <div className="flex items-center gap-0.5 text-warm-gold">
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-warm-gold text-warm-gold" />
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1 text-warm-gold">
+                        {Array.from({ length: rev.rating }).map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-warm-gold text-warm-gold" />
                         ))}
                       </div>
+                      <Quote className="w-5 h-5 text-warm-gold/20 flex-shrink-0" />
                     </div>
-                    <div className="text-xs font-bold text-gray-800 dark:text-gray-200">"{rev.title}"</div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+
+                    <h4 className="font-serif font-bold text-sm text-primary dark:text-white">
+                      "{rev.title}"
+                    </h4>
+
+                    <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                       {rev.comment}
                     </p>
+
+                    <div className="pt-3 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-xs">
+                      <div>
+                        <div className="font-bold text-primary dark:text-white flex items-center gap-1">
+                          <span>{rev.author}</span>
+                          {rev.verified && <CheckCircle className="w-3 h-3 text-emerald-500" />}
+                        </div>
+                        <div className="text-[11px] text-gray-400 flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-warm-gold" />
+                          <span>{rev.location}</span>
+                        </div>
+                      </div>
+
+                      <span className="text-[10px] text-gray-400 font-medium">
+                        {rev.date}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Direct Contact Notice */}
+            <div className="p-6 rounded-2xl bg-[#0B1526] border border-warm-gold/30 text-white flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div>
+                <h4 className="font-serif font-bold text-base text-white">Have questions about this stay?</h4>
+                <p className="text-xs text-gray-300 mt-0.5">Contact TV Residency desk for room details, villa options, and booking enquiries.</p>
+              </div>
+              <a
+                href={`tel:${RESIDENCY_CONTACT.phone}`}
+                className="px-5 py-2.5 bg-warm-gold text-primary font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-gold-light transition-all flex items-center gap-1.5 flex-shrink-0"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call {RESIDENCY_CONTACT.phone}</span>
+              </a>
             </div>
 
           </div>
@@ -345,38 +408,53 @@ export const PropertyDetailsPage: React.FC = () => {
 
       </div>
 
-      {/* Fullscreen Photo Gallery Modal */}
+      {/* Fullscreen Gallery Lightbox */}
       {fullscreenGalleryOpen && (
-        <div className="fixed inset-0 z-50 bg-black flex flex-col p-4 animate-fade-in">
-          <div className="flex justify-between items-center text-white pb-3 border-b border-white/10">
-            <div className="font-serif font-bold text-sm">
+        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col justify-between p-4 sm:p-8 backdrop-blur-md">
+          <div className="flex justify-between items-center text-white">
+            <span className="text-xs font-serif font-bold tracking-wider">
               {property.name} — Photo {activeImageIndex + 1} of {property.images.length}
-            </div>
+            </span>
             <button
               onClick={() => setFullscreenGalleryOpen(false)}
-              className="p-2 text-gray-400 hover:text-white"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-center relative my-4">
+
+          <div className="relative max-w-5xl mx-auto w-full aspect-[16/9] flex items-center justify-center">
             <img
               src={property.images[activeImageIndex]}
-              alt="fullscreen"
-              className="max-h-[85vh] max-w-full object-contain"
+              alt={property.name}
+              className="max-h-full max-w-full object-contain rounded-xl"
             />
             <button
               onClick={handlePrevImage}
-              className="absolute left-4 w-12 h-12 rounded-full bg-black/60 text-white flex items-center justify-center"
+              className="absolute left-2 sm:-left-12 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
             >
-              <ChevronLeft className="w-8 h-8" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute right-4 w-12 h-12 rounded-full bg-black/60 text-white flex items-center justify-center"
+              className="absolute right-2 sm:-right-12 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
             >
-              <ChevronRight className="w-8 h-8" />
+              <ChevronRight className="w-6 h-6" />
             </button>
+          </div>
+
+          <div className="flex justify-center gap-2 overflow-x-auto py-2">
+            {property.images.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveImageIndex(idx)}
+                className={`w-16 h-12 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                  activeImageIndex === idx ? 'border-warm-gold scale-105' : 'border-transparent opacity-50'
+                }`}
+              >
+                <img src={img} alt="thumb" className="w-full h-full object-cover" />
+              </button>
+            ))}
           </div>
         </div>
       )}

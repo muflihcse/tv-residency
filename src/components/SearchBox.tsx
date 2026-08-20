@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResidency } from '../context/ResidencyContext';
 import { CalendarPicker } from './CalendarPicker';
-import { Search, Users, MapPin, ChevronDown, Sparkles, Plus, Minus } from 'lucide-react';
+import { Search, Users, ChevronDown, Sparkles, Plus, Minus } from 'lucide-react';
 
 interface SearchBoxProps {
   variant?: 'hero' | 'compact';
@@ -13,26 +13,17 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ variant = 'hero', defaultT
   const { searchFilters, updateSearchFilters, showToast } = useResidency();
   const navigate = useNavigate();
 
-  const [destination, setDestination] = useState(searchFilters.destination || 'Collegepadi, Kottakkal');
   const [checkIn, setCheckIn] = useState(searchFilters.checkIn);
   const [checkOut, setCheckOut] = useState(searchFilters.checkOut);
   const [adults, setAdults] = useState(searchFilters.adults || 2);
   const [childrenCount, setChildrenCount] = useState(searchFilters.children || 0);
   const [rooms, setRooms] = useState(searchFilters.rooms || 1);
   const [guestPickerOpen, setGuestPickerOpen] = useState(false);
-  const [destPickerOpen, setDestPickerOpen] = useState(false);
-
-  const destinationOptions = [
-    { label: 'Collegepadi, Kottakkal, Kerala', subtitle: 'TV Residency (Near Ahalya Eye Hospital)' },
-    { label: 'Kottakkal City Centre, Kerala', subtitle: 'Central Hub & Shopping District' },
-    { label: 'Malappuram District, Kerala', subtitle: 'Cultural & Heritage Gateway' },
-    { label: 'Calicut & Coastal Kerala', subtitle: 'Near Airport & Coastal Enclaves' },
-  ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateSearchFilters({
-      destination,
+      destination: 'Collegepadi, Kottakkal',
       checkIn,
       checkOut,
       adults,
@@ -42,7 +33,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ variant = 'hero', defaultT
       propertyType: defaultType,
     });
 
-    showToast(`Searching available stays in ${destination.split(',')[0]}...`, 'gold');
+    showToast('Searching available stays...', 'gold');
 
     if (defaultType === 'villa') {
       navigate('/villas');
@@ -57,52 +48,8 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ variant = 'hero', defaultT
         onSubmit={handleSearchSubmit}
         className="bg-white/95 dark:bg-[#15171C]/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-level-3 border border-soft-beige/80 dark:border-white/10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           
-          {/* Destination Field */}
-          <div className="relative flex flex-col gap-1.5 text-left">
-            <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-warm-gold" />
-              Destination
-            </label>
-            
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setDestPickerOpen(!destPickerOpen)}
-                className="w-full text-left py-2.5 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs font-semibold text-gray-900 dark:text-white flex justify-between items-center truncate focus:ring-1 focus:ring-warm-gold"
-              >
-                <span className="truncate">{destination}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-warm-gold flex-shrink-0" />
-              </button>
-
-              {destPickerOpen && (
-                <>
-                  <div className="fixed inset-0 z-20" onClick={() => setDestPickerOpen(false)} />
-                  <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-[#181A20] shadow-level-3 border border-gray-100 dark:border-white/10 rounded-xl p-2 z-30 animate-fade-in">
-                    <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                      Popular Resort Locations
-                    </div>
-                    {destinationOptions.map((opt) => (
-                      <button
-                        type="button"
-                        key={opt.label}
-                        onClick={() => {
-                          setDestination(opt.label);
-                          setDestPickerOpen(false);
-                        }}
-                        className="w-full text-left p-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 text-xs text-gray-800 dark:text-gray-200 transition-colors"
-                      >
-                        <div className="font-semibold text-primary dark:text-white">{opt.label}</div>
-                        <div className="text-[10px] text-gray-400">{opt.subtitle}</div>
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
           {/* Check-In and Check-Out Calendar Picker (2 cols) */}
           <div className="md:col-span-2">
             <CalendarPicker
@@ -115,7 +62,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ variant = 'hero', defaultT
             />
           </div>
 
-          {/* Guests & Rooms Selector Popover */}
+          {/* Guests & Rooms Selector Popover (1 col) */}
           <div className="relative flex flex-col gap-1.5 text-left">
             <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-warm-gold" />

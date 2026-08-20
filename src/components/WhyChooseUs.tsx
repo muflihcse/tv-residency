@@ -1,27 +1,27 @@
 import React from 'react';
-import { BedDouble, MapPin, Wifi, HeartHandshake } from 'lucide-react';
+import { BedDouble, MapPin, Home, CheckCircle2 } from 'lucide-react';
 
 export const WhyChooseUs: React.FC = () => {
   const cards = [
     {
       icon: BedDouble,
-      title: 'Premium Comfort',
-      description: 'Thoughtfully designed rooms and villas with the essential comforts for a relaxing stay.'
+      title: 'Comfortable Accommodation',
+      description: 'Choose from AC, non-AC and three-bed room options.'
     },
     {
       icon: MapPin,
       title: 'Convenient Town Location',
-      description: 'Located in Collegepadi, Kottakkal, near Ahalya Eye Hospital, giving guests convenient access to the town and nearby essentials.'
+      description: 'Located in Collegepadi, Kottakkal, near Ahalya Eye Hospital.'
     },
     {
-      icon: Wifi,
-      title: 'Essential Amenities',
-      description: 'Enjoy modern essentials such as Wi-Fi, air conditioning, room service, comfortable bathrooms, and more.'
+      icon: Home,
+      title: 'Rooms & Villas',
+      description: 'Choose accommodation according to your group and stay requirements.'
     },
     {
-      icon: HeartHandshake,
-      title: 'Warm Hospitality',
-      description: 'A comfortable stay supported by attentive service and a welcoming atmosphere.'
+      icon: CheckCircle2,
+      title: 'Essential Facilities',
+      description: 'Wi-Fi, hot water, parking, TV and power backup.'
     }
   ];
 
@@ -42,7 +42,7 @@ export const WhyChooseUs: React.FC = () => {
             </h2>
             <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3 mb-4"></div>
             <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Designed for guests who value relaxation, dependable amenities, and a central location in Kottakkal.
+              Essential amenities, practical room options, and a central location in Kottakkal.
             </p>
           </div>
 
