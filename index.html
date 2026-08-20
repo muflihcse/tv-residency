@@ -1,0 +1,121 @@
+<!doctype html>
+<html class="scroll-smooth" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TV Residency | Refined Luxury Hotels & Private Villas</title>
+    <meta name="description" content="Discover your private sanctuary at TV Residency. Bespoke luxury villas, ocean suites, Michelin-star dining, and personalized concierge experiences." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN with custom design system -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e2e2e2",
+              "on-secondary": "#ffffff",
+              "secondary-fixed": "#ffe088",
+              "on-surface-variant": "#43474e",
+              "surface-bright": "#f9f9f9",
+              "secondary-fixed-dim": "#e9c349",
+              "surface-variant": "#e2e2e2",
+              "background": "#f9f9f9",
+              "inverse-on-surface": "#f0f1f1",
+              "primary-fixed": "#d4e3ff",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed": "#1b1d0e",
+              "secondary-container": "#fed65b",
+              "on-tertiary-container": "#878873",
+              "on-primary-fixed": "#001c3a",
+              "surface-dim": "#dadada",
+              "surface-charcoal": "#121316",
+              "surface-dark": "#0B0C0E",
+              "on-primary": "#ffffff",
+              "primary-fixed-dim": "#afc8f0",
+              "on-primary-fixed-variant": "#2f486a",
+              "on-tertiary-fixed-variant": "#474836",
+              "on-secondary-fixed-variant": "#574500",
+              "surface-container-high": "#e8e8e8",
+              "error": "#ba1a1a",
+              "outline": "#74777f",
+              "on-secondary-container": "#745c00",
+              "primary": "#000613",
+              "warm-gold": "#D4AF37",
+              "gold-light": "#EED888",
+              "gold-dark": "#A68218",
+              "error-container": "#ffdad6",
+              "deep-navy": "#001F3F",
+              "navy-light": "#0A2D54",
+              "surface-container": "#eeeeee",
+              "inverse-primary": "#afc8f0",
+              "on-primary-container": "#6f88ad",
+              "outline-variant": "#c4c6cf",
+              "on-secondary-fixed": "#241a00",
+              "on-background": "#1a1c1c",
+              "on-surface": "#1a1c1c",
+              "soft-beige": "#F5F5DC",
+              "beige-dark": "#E5E5C8",
+              "tertiary-fixed-dim": "#c8c8b0",
+              "on-tertiary": "#ffffff",
+              "tertiary": "#050700",
+              "surface-container-lowest": "#ffffff",
+              "on-error": "#ffffff",
+              "surface": "#f9f9f9",
+              "secondary": "#735c00",
+              "surface-tint": "#476083",
+              "surface-container-low": "#f3f3f4",
+              "inverse-surface": "#2f3131",
+              "tertiary-fixed": "#e4e4cc",
+              "primary-container": "#001f3f",
+              "tertiary-container": "#1e2011"
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "sm": "0.125rem",
+              "md": "0.375rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "2xl": "1rem",
+              "3xl": "1.5rem",
+              "full": "9999px"
+            },
+            spacing: {
+              "margin-mobile": "16px",
+              "section-gap": "80px",
+              "container-max": "1280px",
+              "gutter": "24px",
+              "unit": "8px",
+              "margin-desktop": "64px"
+            },
+            fontFamily: {
+              "headline-lg": ["Playfair Display", "serif"],
+              "headline-md": ["Playfair Display", "serif"],
+              "headline-xl": ["Playfair Display", "serif"],
+              "headline-xl-mobile": ["Playfair Display", "serif"],
+              "serif": ["Playfair Display", "Georgia", "serif"],
+              "sans": ["Inter", "sans-serif"],
+              "price-display": ["Inter", "sans-serif"],
+              "label-caps": ["Inter", "sans-serif"],
+              "body-lg": ["Inter", "sans-serif"],
+              "body-md": ["Inter", "sans-serif"],
+              "body-sm": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-background dark:bg-surface-dark text-on-background dark:text-gray-100 font-sans antialiased selection:bg-warm-gold selection:text-white transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
