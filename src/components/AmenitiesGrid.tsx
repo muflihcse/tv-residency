@@ -9,14 +9,14 @@ export const AmenitiesGrid: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-xs font-bold text-warm-gold uppercase tracking-[0.25em] block mb-2">
-            Five-Star Inclusions
+            Essential Inclusions
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-primary dark:text-white tracking-tight">
-            Resort & Villa Amenities
+            Residency Amenities
           </h2>
           <div className="w-16 h-0.5 bg-warm-gold mx-auto mt-3 mb-4"></div>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            Crafted for effortless luxury and comfort throughout your entire coastal stay.
+            Crafted for reliable convenience and complete comfort throughout your stay.
           </p>
         </div>
 

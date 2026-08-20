@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { RESIDENCY_CONTACT } from '../data/residencyData';
-import { MapPin, Phone, Mail, Globe, Share2, Compass, Award } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, Share2, Compass } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -40,9 +40,6 @@ export const Footer: React.FC = () => {
               </a>
               <a href="#" className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors">
                 <Compass className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 hover:bg-warm-gold hover:text-primary flex items-center justify-center transition-colors">
-                <Award className="w-4 h-4" />
               </a>
             </div>
           </div>

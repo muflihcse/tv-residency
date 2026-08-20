@@ -130,25 +130,14 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row md:flex-col gap-3 w-full md:w-auto">
-              <a
-                href="https://share.google/n1Z6lQmv4DNvdLZXF"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3.5 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-primary dark:hover:bg-gold-light transition-all flex items-center justify-center gap-2 shadow-md text-center"
-              >
-                <span>View Location →</span>
-              </a>
-
-              <a
-                href="https://share.google/n1Z6lQmv4DNvdLZXF"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2.5 border border-warm-gold/50 text-warm-gold rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-warm-gold hover:text-primary transition-all text-center"
-              >
-                <span>📍 View on Google Maps →</span>
-              </a>
-            </div>
+            <a
+              href="https://share.google/n1Z6lQmv4DNvdLZXF"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-7 py-3.5 bg-warm-gold hover:bg-gold-light text-primary font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:scale-105 flex-shrink-0"
+            >
+              <span>📍 View on Google Maps →</span>
+            </a>
 
           </div>
         </div>

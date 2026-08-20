@@ -65,11 +65,11 @@ export const NearbyExplore: React.FC = () => {
         {/* 2-Column Split: Map Placeholder & Places Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Map-Style Luxury Interactive Placeholder (5 cols) */}
-          <div className="lg:col-span-5 bg-white dark:bg-[#15171C] rounded-2xl p-6 border border-soft-beige/80 dark:border-white/10 shadow-level-2 sticky top-24">
+          {/* Map-Style Luxury Interactive Placeholder (5 cols - static on mobile, sticky only on desktop) */}
+          <div className="lg:col-span-5 bg-white dark:bg-[#15171C] rounded-2xl p-4 sm:p-6 border border-soft-beige/80 dark:border-white/10 shadow-level-2 static lg:sticky lg:top-24">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-serif text-lg font-bold text-primary dark:text-white">
+                <h3 className="font-serif text-base sm:text-lg font-bold text-primary dark:text-white">
                   {RESIDENCY_CONTACT.name}
                 </h3>
                 <span className="text-xs text-warm-gold font-medium">{RESIDENCY_CONTACT.addressLine1} ({RESIDENCY_CONTACT.landmark})</span>
@@ -152,15 +152,23 @@ export const NearbyExplore: React.FC = () => {
                 <div
                   key={place.id}
                   onClick={() => setSelectedPlaceId(place.id)}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col sm:flex-row gap-4 items-center ${
+                  className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center ${
                     isSelected
-                      ? 'bg-white dark:bg-[#181A20] border-warm-gold shadow-md'
+                      ? 'bg-white dark:bg-[#181A20] border-warm-gold shadow-md ring-1 ring-warm-gold/40'
                       : 'bg-white/80 dark:bg-[#15171C]/80 border-gray-100 dark:border-white/5 hover:border-warm-gold/50'
                   }`}
                 >
-                  <div className="relative w-full sm:w-28 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-900">
-                    <img src={place.image} alt={place.name} className="w-full h-full object-cover" loading="lazy" />
-                    <span className="absolute bottom-1 right-1 bg-black/70 text-[9px] text-white px-1.5 py-0.5 rounded">
+                  <div className="relative w-full sm:w-28 h-40 sm:h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-900">
+                    <img
+                      src={place.image}
+                      alt={place.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80';
+                      }}
+                    />
+                    <span className="absolute bottom-1 right-1 bg-black/75 text-[9px] font-bold text-white px-1.5 py-0.5 rounded">
                       {place.distance}
                     </span>
                   </div>

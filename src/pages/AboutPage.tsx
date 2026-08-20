@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, Compass, HeartHandshake, Leaf, Award, Sparkles, MapPin } from 'lucide-react';
+import { ChevronDown, Compass, HeartHandshake, Leaf, Building2, Sparkles, MapPin } from 'lucide-react';
 import { useResidency } from '../context/ResidencyContext';
 import { RESIDENCY_CONTACT } from '../data/residencyData';
 
@@ -11,18 +11,18 @@ export const AboutPage: React.FC = () => {
   const values = [
     {
       icon: HeartHandshake,
-      title: 'Anticipatory Hospitality',
-      description: 'We believe true luxury is invisible yet omnipresent. Our personal butlers craft personalized itineraries before you arrive.'
+      title: 'Attentive Hospitality',
+      description: 'We believe thoughtful service creates a comfortable, memorable stay. Our team is available 24/7 to assist you.'
     },
     {
       icon: Leaf,
-      title: '100% Sustainable Sanctuary',
-      description: 'Solar-powered operations, organic farm-to-table cuisine, zero single-use plastics, and rainwater harvesting ponds.'
+      title: 'Serene Natural Setting',
+      description: 'Lush greenery, peaceful garden sit-outs, and clean, thoughtfully maintained spaces.'
     },
     {
-      icon: Award,
-      title: 'Architectural Harmony',
-      description: 'Blending centuries-old Kerala Nalukettu woodwork with airy floor-to-ceiling glass and private rim-flow infinity pools.'
+      icon: Building2,
+      title: 'Architectural Comfort',
+      description: 'Blending contemporary Kerala aesthetics with modern room design, private verandahs, and calm interiors.'
     },
     {
       icon: Sparkles,

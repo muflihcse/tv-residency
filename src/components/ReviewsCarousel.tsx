@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { REVIEWS } from '../data/residencyData';
-import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2, Award, Sparkles, ShieldCheck } from 'lucide-react';
+import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 export const ReviewsCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,69 +95,6 @@ export const ReviewsCarousel: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Dynamic Theme-Blended Accolades Bar */}
-        <div className="mt-12 p-3 sm:p-4 bg-gradient-to-r from-[#0B1526] via-[#101E36] to-[#0B1526] rounded-2xl border border-warm-gold/40 shadow-level-2 backdrop-blur-md">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
-            
-            <div className="flex items-center justify-center gap-2.5 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-warm-gold/50 transition-all duration-300 group cursor-default">
-              <div className="w-7 h-7 rounded-lg bg-warm-gold/20 flex items-center justify-center text-warm-gold flex-shrink-0 group-hover:scale-110 group-hover:bg-warm-gold group-hover:text-primary transition-all">
-                <Award className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <span className="text-[10px] sm:text-[11px] font-bold text-white tracking-wider block uppercase group-hover:text-warm-gold transition-colors">
-                  Forbes Travel Guide
-                </span>
-                <span className="text-[9px] text-warm-gold font-semibold uppercase tracking-widest block">
-                  5★ Classification
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-2.5 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-warm-gold/50 transition-all duration-300 group cursor-default">
-              <div className="w-7 h-7 rounded-lg bg-warm-gold/20 flex items-center justify-center text-warm-gold flex-shrink-0 group-hover:scale-110 group-hover:bg-warm-gold group-hover:text-primary transition-all">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <span className="text-[10px] sm:text-[11px] font-bold text-white tracking-wider block uppercase group-hover:text-warm-gold transition-colors">
-                  Condé Nast Traveler
-                </span>
-                <span className="text-[9px] text-warm-gold font-semibold uppercase tracking-widest block">
-                  Gold List Honoree
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-2.5 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-warm-gold/50 transition-all duration-300 group cursor-default">
-              <div className="w-7 h-7 rounded-lg bg-warm-gold/20 flex items-center justify-center text-warm-gold flex-shrink-0 group-hover:scale-110 group-hover:bg-warm-gold group-hover:text-primary transition-all">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <span className="text-[10px] sm:text-[11px] font-bold text-white tracking-wider block uppercase group-hover:text-warm-gold transition-colors">
-                  Architectural Digest
-                </span>
-                <span className="text-[9px] text-warm-gold font-semibold uppercase tracking-widest block">
-                  India Top Stays
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-2.5 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-warm-gold/50 transition-all duration-300 group cursor-default">
-              <div className="w-7 h-7 rounded-lg bg-warm-gold/20 flex items-center justify-center text-warm-gold flex-shrink-0 group-hover:scale-110 group-hover:bg-warm-gold group-hover:text-primary transition-all">
-                <Star className="w-4 h-4 fill-warm-gold" />
-              </div>
-              <div className="text-left">
-                <span className="text-[10px] sm:text-[11px] font-bold text-white tracking-wider block uppercase group-hover:text-warm-gold transition-colors">
-                  Kerala Tourism
-                </span>
-                <span className="text-[9px] text-warm-gold font-semibold uppercase tracking-widest block">
-                  Diamond Award
-                </span>
-              </div>
-            </div>
-
-          </div>
         </div>
 
       </div>

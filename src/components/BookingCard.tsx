@@ -50,7 +50,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ property }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#15171C] rounded-2xl p-6 shadow-level-3 border border-soft-beige/80 dark:border-white/10 sticky top-24">
+    <div className="bg-white dark:bg-[#15171C] rounded-2xl p-6 shadow-level-3 border border-soft-beige/80 dark:border-white/10 static lg:sticky lg:top-24">
       
       {/* Nightly Rate Header */}
       <div className="flex justify-between items-baseline pb-5 border-b border-gray-100 dark:border-white/10">
