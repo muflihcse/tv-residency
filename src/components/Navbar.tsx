@@ -52,8 +52,34 @@ export const Navbar: React.FC = () => {
     setCurrencyDropdownOpen(false);
   }, [location.pathname]);
 
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setUserDropdownOpen(false);
+        setCurrencyDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const handleLogout = () => {
     logout();
+    setMobileMenuOpen(false);
     setUserDropdownOpen(false);
     showToast('Signed out successfully', 'info');
     navigate('/');
@@ -307,63 +333,160 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Navigation Overlay Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white dark:bg-[#121418] border-t border-gray-100 dark:border-white/10 px-4 pt-4 pb-6 space-y-4 shadow-level-3 animate-fade-in">
-            <div className="grid grid-cols-2 gap-2 pb-3 border-b border-gray-100 dark:border-white/10">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="py-2.5 px-3 text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-warm-gold rounded-md hover:bg-gray-50 dark:hover:bg-white/5"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-start">
+            {/* Backdrop overlay (click outside to close) */}
+            <div 
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+              onClick={() => setMobileMenuOpen(false)} 
+              aria-hidden="true"
+            />
 
-            <div className="flex flex-col gap-3 pt-2">
-              {isAuthenticated && user ? (
-                <div className="p-3 bg-warm-gold/10 rounded-xl border border-warm-gold/30 flex justify-between items-center">
-                  <div>
-                    <div className="text-xs font-bold text-gray-900 dark:text-white">{user.name}</div>
-                    <div className="text-[11px] text-warm-gold font-semibold">{user.membershipTier} Member Tier</div>
+            {/* Slide-Down Menu Content */}
+            <div 
+              className="relative w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-[#121418] border-b border-warm-gold/30 shadow-level-3 p-5 z-10 animate-fade-in flex flex-col text-left"
+            >
+              {/* Header with TV Monogram Logo & Close (X) Button */}
+              <div className="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded bg-gradient-to-br from-deep-navy via-primary to-deep-navy dark:from-warm-gold/20 dark:to-deep-navy border border-warm-gold/60 flex items-center justify-center shadow-sm">
+                    <span className="font-serif font-bold text-warm-gold text-sm">TV</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Link to="/bookings" className="text-xs font-bold text-primary dark:text-warm-gold underline">
-                      My Bookings
-                    </Link>
-                    <button onClick={handleLogout} className="text-xs text-red-500 underline font-medium">
-                      Logout
-                    </button>
+                  <div>
+                    <span className="font-serif text-lg font-bold text-primary dark:text-white block leading-tight">
+                      TV Residency
+                    </span>
+                    <span className="text-[8px] tracking-[0.25em] uppercase text-warm-gold font-semibold block">
+                      Collegepadi, Kottakkal
+                    </span>
                   </div>
                 </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="w-full py-3 border border-warm-gold text-warm-gold text-xs font-bold rounded-lg uppercase tracking-wider text-center"
+
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-full text-gray-500 dark:text-gray-300 hover:text-warm-gold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                  aria-label="Close navigation menu"
                 >
-                  Sign In / Create Account
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Navigation Links Grid */}
+              <nav className="py-4 space-y-1">
+                {[
+                  { label: 'Home', path: '/' },
+                  { label: 'Rooms', path: '/rooms' },
+                  { label: 'Villas', path: '/villas' },
+                  { label: 'Offers', path: '/offers' },
+                  { label: 'About', path: '/about' },
+                  { label: 'Contact', path: '/contact' },
+                ].map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-soft-beige/60 dark:bg-warm-gold/15 text-primary dark:text-warm-gold font-bold'
+                          : 'text-gray-800 dark:text-gray-200 hover:text-warm-gold hover:bg-gray-50 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-warm-gold"></span>}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* User / Authentication Actions */}
+              <div className="pt-3 pb-2 border-t border-gray-100 dark:border-white/10 space-y-3">
+                {isAuthenticated && user ? (
+                  <div className="p-3.5 bg-warm-gold/10 rounded-xl border border-warm-gold/30 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-warm-gold text-primary flex items-center justify-center font-bold text-xs">
+                          {user.name.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-gray-900 dark:text-white">{user.name}</div>
+                          <div className="text-[10px] text-gray-500 dark:text-gray-400">{user.email}</div>
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-warm-gold text-primary uppercase tracking-wider">
+                        {user.membershipTier}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-warm-gold/20 text-xs">
+                      <Link
+                        to="/bookings"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="font-bold text-primary dark:text-warm-gold hover:underline flex items-center gap-1"
+                      >
+                        <Bookmark className="w-3.5 h-3.5" />
+                        <span>My Bookings</span>
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="text-red-500 hover:underline font-semibold flex items-center gap-1"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-2.5 px-3.5 border border-warm-gold/50 hover:border-warm-gold text-warm-gold hover:bg-warm-gold hover:text-primary transition-all rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 text-center"
+                  >
+                    <UserIcon className="w-4 h-4" />
+                    <span>Sign In / Profile</span>
+                  </Link>
+                )}
+
+                {/* Book Your Stay CTA */}
+                <Link
+                  to="/rooms"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-primary dark:hover:bg-gold-light transition-all flex items-center justify-center gap-2 shadow-md text-center"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>Book Your Stay</span>
                 </Link>
-              )}
+              </div>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  toggleConcierge();
-                }}
-                className="w-full py-2.5 bg-gray-100 dark:bg-white/5 text-gray-800 dark:text-gray-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-2"
-              >
-                <Compass className="w-4 h-4 text-warm-gold" />
-                <span>Ask AI Concierge</span>
-              </button>
+              {/* Footer Quick Controls */}
+              <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <button
+                  type="button"
+                  onClick={toggleDarkMode}
+                  className="flex items-center gap-1.5 hover:text-warm-gold transition-colors"
+                >
+                  {darkMode ? <Sun className="w-4 h-4 text-warm-gold" /> : <Moon className="w-4 h-4 text-deep-navy" />}
+                  <span>{darkMode ? 'Light Theme' : 'Dark Theme'}</span>
+                </button>
 
-              <Link
-                to="/rooms"
-                className="w-full py-3 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-bold text-xs uppercase tracking-wider rounded-lg shadow text-center"
-              >
-                Search Available Stays
-              </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    toggleConcierge();
+                  }}
+                  className="flex items-center gap-1 text-warm-gold font-semibold hover:underline"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Ask Concierge</span>
+                </button>
+              </div>
+
             </div>
           </div>
         )}
