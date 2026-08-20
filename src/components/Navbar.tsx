@@ -185,10 +185,10 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Icons & Auth */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             
-            {/* Currency Selector */}
-            <div className="relative">
+            {/* Currency Selector (Desktop / Tablet) */}
+            <div className="relative hidden md:block">
               <button
                 onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
                 className="flex items-center gap-1 px-2.5 py-1.5 rounded text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors border border-gray-200 dark:border-white/10"
@@ -240,10 +240,10 @@ export const Navbar: React.FC = () => {
               )}
             </button>
 
-            {/* Wishlist Link */}
+            {/* Wishlist Link (Desktop / Tablet) */}
             <Link
               to="/rooms"
-              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors relative"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors relative hidden sm:block"
               title="Saved Residences"
             >
               <Heart className={`w-4 h-4 ${favorites.length > 0 ? 'text-red-500 fill-red-500' : ''}`} />
@@ -254,9 +254,9 @@ export const Navbar: React.FC = () => {
               )}
             </Link>
 
-            {/* User Account / Auth Experience */}
+            {/* User Account / Auth Experience (Desktop / Tablet) */}
             {isAuthenticated && user ? (
-              <div className="relative">
+              <div className="relative hidden md:block">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-warm-gold/50 bg-warm-gold/10 text-xs font-semibold text-warm-gold hover:bg-warm-gold/20 transition-all"
@@ -304,7 +304,7 @@ export const Navbar: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Link
                   to="/login"
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 hover:text-warm-gold transition-colors"
@@ -314,7 +314,7 @@ export const Navbar: React.FC = () => {
                 </Link>
                 <Link
                   to="/rooms"
-                  className="hidden sm:inline-flex bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-semibold text-xs px-4 py-2.5 rounded hover:bg-primary dark:hover:bg-gold-light transition-all shadow-sm items-center gap-1.5"
+                  className="bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-semibold text-xs px-4 py-2.5 rounded hover:bg-primary dark:hover:bg-gold-light transition-all shadow-sm items-center gap-1.5"
                 >
                   <Calendar className="w-3.5 h-3.5" />
                   <span>Explore Stays</span>
@@ -322,153 +322,152 @@ export const Navbar: React.FC = () => {
               </div>
             )}
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Menu Toggle (Always properly enclosed within header) */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-800 dark:text-white hover:text-warm-gold transition-colors"
+              className="lg:hidden p-2 rounded-lg text-gray-800 dark:text-white hover:text-warm-gold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors flex items-center justify-center flex-shrink-0"
               aria-label="Toggle navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Navigation Overlay Drawer */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-start">
-            {/* Backdrop overlay (click outside to close) */}
-            <div 
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
-              onClick={() => setMobileMenuOpen(false)} 
-              aria-hidden="true"
-            />
+      {/* Mobile Navigation Full-Screen Screen Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[9999] lg:hidden bg-white dark:bg-[#121418] flex flex-col justify-between overflow-y-auto animate-fade-in text-left">
+          
+          {/* Top Bar inside Full Screen */}
+          <div className="px-5 py-4 flex justify-between items-center border-b border-gray-100 dark:border-white/10 sticky top-0 bg-white/95 dark:bg-[#121418]/95 backdrop-blur-md z-10">
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded bg-gradient-to-br from-deep-navy via-primary to-deep-navy dark:from-warm-gold/20 dark:to-deep-navy border border-warm-gold/60 flex items-center justify-center shadow-sm">
+                <span className="font-serif font-bold text-warm-gold text-lg">TV</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-xl font-bold tracking-tight text-primary dark:text-white leading-tight">
+                  TV Residency
+                </span>
+                <span className="text-[8px] tracking-[0.25em] uppercase text-warm-gold font-semibold -mt-0.5">
+                  Refined Kerala Luxury
+                </span>
+              </div>
+            </Link>
 
-            {/* Slide-Down Menu Content */}
-            <div 
-              className="relative w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-[#121418] border-b border-warm-gold/30 shadow-level-3 p-5 z-10 animate-fade-in flex flex-col text-left"
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-warm-gold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors border border-gray-200 dark:border-white/10"
+              aria-label="Close navigation menu"
             >
-              {/* Header with TV Monogram Logo & Close (X) Button */}
-              <div className="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded bg-gradient-to-br from-deep-navy via-primary to-deep-navy dark:from-warm-gold/20 dark:to-deep-navy border border-warm-gold/60 flex items-center justify-center shadow-sm">
-                    <span className="font-serif font-bold text-warm-gold text-sm">TV</span>
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Body Content */}
+          <div className="p-5 flex-1 flex flex-col justify-between space-y-6">
+            {/* Navigation Links */}
+            <nav className="space-y-1.5">
+              {[
+                { label: 'Home', path: '/' },
+                { label: 'Rooms', path: '/rooms' },
+                { label: 'Villas', path: '/villas' },
+                { label: 'Offers', path: '/offers' },
+                { label: 'About', path: '/about' },
+                { label: 'Contact', path: '/contact' },
+              ].map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-semibold transition-all ${
+                      isActive
+                        ? 'bg-soft-beige/70 dark:bg-warm-gold/15 text-primary dark:text-warm-gold border border-warm-gold/30 shadow-sm'
+                        : 'text-gray-800 dark:text-gray-200 hover:text-warm-gold hover:bg-gray-50 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {isActive ? (
+                      <span className="w-2 h-2 rounded-full bg-warm-gold"></span>
+                    ) : (
+                      <span className="text-gray-400 text-sm">→</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* User / Authentication & CTA */}
+            <div className="space-y-3 pt-4 border-t border-gray-100 dark:border-white/10">
+              {isAuthenticated && user ? (
+                <div className="p-4 bg-warm-gold/10 rounded-2xl border border-warm-gold/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-warm-gold text-primary flex items-center justify-center font-bold text-sm">
+                        {user.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-gray-900 dark:text-white">{user.name}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded bg-warm-gold text-primary uppercase tracking-wider">
+                      {user.membershipTier}
+                    </span>
                   </div>
-                  <div>
-                    <span className="font-serif text-lg font-bold text-primary dark:text-white block leading-tight">
-                      TV Residency
-                    </span>
-                    <span className="text-[8px] tracking-[0.25em] uppercase text-warm-gold font-semibold block">
-                      Collegepadi, Kottakkal
-                    </span>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-warm-gold/20 text-xs">
+                    <Link
+                      to="/bookings"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-bold text-primary dark:text-warm-gold hover:underline flex items-center gap-1.5 py-1"
+                    >
+                      <Bookmark className="w-4 h-4" />
+                      <span>My Bookings</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="text-red-500 hover:underline font-semibold flex items-center gap-1.5 py-1"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-full text-gray-500 dark:text-gray-300 hover:text-warm-gold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                  aria-label="Close navigation menu"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Navigation Links Grid */}
-              <nav className="py-4 space-y-1">
-                {[
-                  { label: 'Home', path: '/' },
-                  { label: 'Rooms', path: '/rooms' },
-                  { label: 'Villas', path: '/villas' },
-                  { label: 'Offers', path: '/offers' },
-                  { label: 'About', path: '/about' },
-                  { label: 'Contact', path: '/contact' },
-                ].map((item) => {
-                  const isActive = location.pathname === item.path;
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-soft-beige/60 dark:bg-warm-gold/15 text-primary dark:text-warm-gold font-bold'
-                          : 'text-gray-800 dark:text-gray-200 hover:text-warm-gold hover:bg-gray-50 dark:hover:bg-white/5'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-warm-gold"></span>}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              {/* User / Authentication Actions */}
-              <div className="pt-3 pb-2 border-t border-gray-100 dark:border-white/10 space-y-3">
-                {isAuthenticated && user ? (
-                  <div className="p-3.5 bg-warm-gold/10 rounded-xl border border-warm-gold/30 space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-warm-gold text-primary flex items-center justify-center font-bold text-xs">
-                          {user.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-gray-900 dark:text-white">{user.name}</div>
-                          <div className="text-[10px] text-gray-500 dark:text-gray-400">{user.email}</div>
-                        </div>
-                      </div>
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-warm-gold text-primary uppercase tracking-wider">
-                        {user.membershipTier}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-2 border-t border-warm-gold/20 text-xs">
-                      <Link
-                        to="/bookings"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="font-bold text-primary dark:text-warm-gold hover:underline flex items-center gap-1"
-                      >
-                        <Bookmark className="w-3.5 h-3.5" />
-                        <span>My Bookings</span>
-                      </Link>
-
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="text-red-500 hover:underline font-semibold flex items-center gap-1"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        <span>Logout</span>
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full py-2.5 px-3.5 border border-warm-gold/50 hover:border-warm-gold text-warm-gold hover:bg-warm-gold hover:text-primary transition-all rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 text-center"
-                  >
-                    <UserIcon className="w-4 h-4" />
-                    <span>Sign In / Profile</span>
-                  </Link>
-                )}
-
-                {/* Book Your Stay CTA */}
+              ) : (
                 <Link
-                  to="/rooms"
+                  to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 bg-deep-navy dark:bg-warm-gold text-white dark:text-primary font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-primary dark:hover:bg-gold-light transition-all flex items-center justify-center gap-2 shadow-md text-center"
+                  className="w-full py-3.5 px-4 border border-warm-gold/50 hover:border-warm-gold text-warm-gold hover:bg-warm-gold hover:text-primary transition-all rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 text-center"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Your Stay</span>
+                  <UserIcon className="w-4 h-4" />
+                  <span>Sign In / Profile</span>
                 </Link>
-              </div>
+              )}
 
-              {/* Footer Quick Controls */}
-              <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              {/* Book Your Stay Primary Button */}
+              <Link
+                to="/rooms"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-4 bg-warm-gold hover:bg-gold-light text-primary font-bold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 shadow-gold text-center"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Book Your Stay</span>
+              </Link>
+            </div>
+
+            {/* Bottom Quick Controls & Address */}
+            <div className="pt-4 border-t border-gray-100 dark:border-white/10 space-y-3">
+              <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300">
                 <button
                   type="button"
                   onClick={toggleDarkMode}
-                  className="flex items-center gap-1.5 hover:text-warm-gold transition-colors"
+                  className="flex items-center gap-2 hover:text-warm-gold transition-colors font-medium"
                 >
                   {darkMode ? <Sun className="w-4 h-4 text-warm-gold" /> : <Moon className="w-4 h-4 text-deep-navy" />}
                   <span>{darkMode ? 'Light Theme' : 'Dark Theme'}</span>
@@ -480,17 +479,22 @@ export const Navbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     toggleConcierge();
                   }}
-                  className="flex items-center gap-1 text-warm-gold font-semibold hover:underline"
+                  className="flex items-center gap-1.5 text-warm-gold font-bold hover:underline"
                 >
-                  <Compass className="w-3.5 h-3.5" />
-                  <span>Ask Concierge</span>
+                  <Compass className="w-4 h-4" />
+                  <span>AI Concierge</span>
                 </button>
               </div>
 
+              <div className="text-center text-[11px] text-gray-500 dark:text-gray-400">
+                <span>Collegepadi, Kottakkal • Phone: </span>
+                <a href="tel:8281628559" className="text-warm-gold font-bold font-mono">8281628559</a>
+              </div>
             </div>
           </div>
-        )}
-      </header>
+
+        </div>
+      )}
     </>
   );
 };
